@@ -1,0 +1,19 @@
+# List of players currently muted
+mute-list:
+  - mutedplayer1
+
+# list of mute details
+# A player being listed here does not mean they are muted
+punishment-info:
+  # name of player punished
+  mutedplayer1:
+    # used to track players after name changes
+    uuid: null
+    # datetime when the mute was
+    datetime-muted: null
+    # datetime when player is unmuted - requires the muted player to send a message to trigger
+    muted-until: null
+    # admin who muted the player
+    muted-by: admin1
+    # mute reason
+    reason: to demonstrate config

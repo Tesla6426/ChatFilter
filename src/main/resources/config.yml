@@ -1,4 +1,9 @@
 # Chat Filter by _txsla and NBT Archives
+# This plugin uses MiniMessage to parse messaged
+
+
+# For compatibility with other chat plugins
+event-priority: normal
 
 # [   ENABLE FILTER CATEGORIES ]
 # Add a category here to enable it
@@ -30,16 +35,28 @@ spam-limiter:
 # %PLAYER% - violator's username
 # %MESSAGE% - message that triggered the filter
 # %CATEGORY% - filter category that got triggered
-# This plugin uses MiniMessage to parse messaged
 notify:
   enabled: false
   message: '<red>%PLAYER% has violated %CATEGORY% with message %MESSAGE%</red>'
+
 
 # logs violations
 log:
   to-file: true
   to-discord: false
   webhook: "webhook"
+
+# Mute settings
+mute:
+  # should mods be required ot provide a reason?
+  require-reason: true
+  # show muted player's their messages
+  ghost-player: true
+  # How does your chat plugin format messages? - this is for ghosting players
+  # Placeholders:
+  # %PLAYER% - player who sent the message
+  # %MESSAGE% - player's message
+  message: "<white><%PLAYER%> %MESSAGE%</white>"
 
 
 

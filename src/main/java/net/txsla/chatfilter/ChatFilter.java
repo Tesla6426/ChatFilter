@@ -2,18 +2,21 @@ package net.txsla.chatfilter;
 
 import net.txsla.chatfilter.log.file;
 import net.txsla.chatfilter.spam.spamLimiter;
+import org.bukkit.Server;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
 
 public final class ChatFilter extends JavaPlugin {
+    public static Plugin plugin;
     public static Path dir;
     @Override
         public void onEnable() {
             // Plugin startup logic
             saveDefaultConfig();
-
+            plugin = this;
             // get plugin file path
             dir = this.getDataPath();
             System.out.println("DATA DIRECTORY: " + dir);
