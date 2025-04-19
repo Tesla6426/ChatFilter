@@ -1,0 +1,48 @@
+# Chat Filter by _txsla and NBT Archives
+
+# [   ENABLE FILTER CATEGORIES ]
+# Add a category here to enable it
+# Permission 'chatfilter.regex.bypass' will bypass this filter
+# Messages are filtered from first category in this list to last, so if two filters both match the pattern [a-zA-Z]\.(\.com|\.net), only the one listed first will be triggered
+# The 'gamersafer' list is the official list of GamerSafer.com
+enabled-categories:
+  - 'example1'
+  - 'example2'
+  - 'gamersafer'
+
+
+# [  SPAM LIMITER   ]
+# Every time a player sends a message, it increments a counter
+# Every x milliseconds that counter is decremented
+# If a player hits the max messages on their counter, their messages are not shown to other players
+# Permission `chatfilter.spam.bypass` will bypass this filter
+spam-limiter:
+  enabled: true
+  count-repeats: true # should repeat messages increment twice?
+  counter-ceiling: 4 # if a player's message counter goes above this number, their messages will be hidden to other players
+  decrement-timer: 4000 # milliseconds between message counter decrements
+
+
+# [   NOTIFY   ]
+# Notify and admin when someone triggers a filter
+# Players with permission 'chatfilter.notify' will be notified
+# Placeholders:
+# %PLAYER% - violator's username
+# %MESSAGE% - message that triggered the filter
+# %CATEGORY% - filter category that got triggered
+# This plugin uses MiniMessage to parse messaged
+notify:
+  enabled: false
+  message: '<red>%PLAYER% has violated %CATEGORY% with message %MESSAGE%</red>'
+
+# logs violations
+log:
+  to-file: true
+  to-discord: false
+  webhook: "webhook"
+
+
+
+
+  # enable debug console output
+  debug: false
