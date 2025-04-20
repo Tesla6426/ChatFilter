@@ -5,36 +5,59 @@
 # For compatibility with other chat plugins
 event-priority: normal
 
-# [   ENABLE FILTER CATEGORIES ]
-# Add a category here to enable it
-# Permission 'chatfilter.regex.bypass' will bypass this filter
+# [   REGISTER FILTER CATEGORIES ]
+# Add a category here to register it
+# The plugin will not recognize categories that are not listed here
+# Permission 'chatfilter.filter.bypass' will bypass these filters
+# It is recommended that you put more important categories first on the list.
 # Messages are filtered from first category in this list to last, so if two filters both match the pattern [a-zA-Z]\.(\.com|\.net), only the one listed first will be triggered
 # The 'gamersafer' list is the official list of GamerSafer.com
-enabled-categories:
+registered-categories:
+  - 'gamersafer'
   - 'example1'
   - 'example2'
-  - 'gamersafer'
 
 
 # [  SPAM LIMITER   ]
 # Every time a player sends a message, it increments a counter
 # Every x milliseconds that counter is decremented
 # If a player hits the max messages on their counter, their messages are not shown to other players
-# Permission `chatfilter.spam.bypass` will bypass this filter
+# Permission `chatfilter.spam.bypass` will bypass this limiter
 spam-limiter:
   enabled: true
-  count-repeats: true # should repeat messages increment twice?
-  counter-ceiling: 4 # if a player's message counter goes above this number, their messages will be hidden to other players
-  decrement-timer: 4000 # milliseconds between message counter decrements
+  ghost: true # send player their own messages, so they do not know they are muted
+  count-repeats: true # should repeat messages increment twice? ADD THIS LATER
+  counter-ceiling: 5 # if a player's message counter goes above this number, their messages will be hidden to other players
+  decrement-timer: 3000 # milliseconds between message counter decrements
+  ghost-player: true # should we show the player their cancelled message, so they do not know they are currently muted?
+
+
+# This is the message format sent to ghosted players.
+# Can also be used to tell players to slow down
+# Placeholders:
+# %PLAYER% - player who sent the message
+# %MESSAGE% - player's message
+# %SERVER% - server that player is in
+# %WORLD% - world that player is on
+ghost-format: "[GHOSTED] <white><%PLAYER%> %MESSAGE%</white>"
+
+# Server Mute settings
+# Muted players' messages can not be s
+mute:
+  # should mods be required ot provide a reason?
+  require-reason: true
+  # show muted player's their messages
+  ghost-player: true
 
 
 # [   NOTIFY   ]
-# Notify and admin when someone triggers a filter
+# Notify a player when someone triggers a filter
 # Players with permission 'chatfilter.notify' will be notified
 # Placeholders:
 # %PLAYER% - violator's username
 # %MESSAGE% - message that triggered the filter
 # %CATEGORY% - filter category that got triggered
+# %RECIPIENT% - player who is receiving the message
 notify:
   enabled: false
   message: '<red>%PLAYER% has violated %CATEGORY% with message %MESSAGE%</red>'
@@ -42,24 +65,21 @@ notify:
 
 # logs violations
 log:
+  # Log Message Placeholders:
+  # %PLAYER% - player that triggered the filter
+  # %MESSAGE% - message that triggered the filter
+  # %CATEGORY% - category of filter that got triggered
+  # %PATTERN% - regex pattern that matched
+  message-format: "%PLAYER% has violated filter %CATEGORY% with message %MESSAGE%"
   to-file: true
   to-discord: false
-  webhook: "webhook"
-
-# Mute settings
-mute:
-  # should mods be required ot provide a reason?
-  require-reason: true
-  # show muted player's their messages
-  ghost-player: true
-  # How does your chat plugin format messages? - this is for ghosting players
-  # Placeholders:
-  # %PLAYER% - player who sent the message
-  # %MESSAGE% - player's message
-  message: "<white><%PLAYER%> %MESSAGE%</white>"
+  webhook: "WEBHOOK URL"
 
 
+# Should scan times be timed?
+# Use this to optimise your regex patterns
+profile: false
 
 
-  # enable debug console output
-  debug: false
+# enable debug console output
+debug: false

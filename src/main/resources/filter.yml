@@ -1,12 +1,17 @@
+# This filter uses regex to match messages and will not work if you set up your expressions correctly
+# Make sure to set your patterns to match to words in the middle of messages
+# THE FILTERS ARE CASE SENSITIVE, design your regex accordingly
+# Resources:
+# https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet
+# https://regex101.com/
 
 
 # Action tag allowed arguments:
+# 'notify' - notify user as specified in config.yml under notify
 # 'cancel' - cancel the message
+# 'censor' - replaced the offending message with asterisks (least-optimised)
 # 'ghost' - return message to sender but hide message from other players
 # 'ignore' - does not cancel or modify the message, but still runs the commands
-# 'notify' - notify user as specified in config.yml under notify
-# 'censor' - replaced the offending message with asterisks (least-optimised)
-# 'null'   - disable category
 
 
 # Placeholders for commands
@@ -21,6 +26,8 @@
 categories:
   # Name of category
   example1:
+    # Whether this category is enabled by default
+    enabled: false
     # Action to be taken when violation occurs
     action:
       - 'cancel'
@@ -28,7 +35,7 @@ categories:
     # These commands are executed as console when a player triggers the filter
     commands:
       - '/ban %PLAYER%'
-      - '/tellraw @a "%player% was banned"'
+      - '/tellraw @a "%PLAYER% was banned"'
     # Regex patterns for the filter to match
     regex:
       - 'pattern-1'
@@ -36,6 +43,7 @@ categories:
       - 'pattern-3'
   # You can add unlimited categories
   example2:
+    enabled: false
     action:
       - 'cancel'
     commands:
@@ -49,6 +57,7 @@ categories:
   # The GamerSafer Regex list cannot be modified as it uses GamerSafer's official list
   # If there are ever issues with this filter, please make an issue on ChatFilter's GitHub Page
   gamersafer:
+    enabled: false
     action:
       - 'cancel'
       - 'notify'

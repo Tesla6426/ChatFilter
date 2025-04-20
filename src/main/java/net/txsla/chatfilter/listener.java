@@ -1,12 +1,9 @@
 package net.txsla.chatfilter;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import net.txsla.chatfilter.spam.*;
-import net.txsla.chatfilter.mute.*;
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -17,22 +14,39 @@ public class listener implements Listener {
 
         // get sender info
         Player sender = event.getPlayer();
-        String message = event.message().toString();
+        String message = PlainTextComponentSerializer.plainText().serialize( event.message() );
         boolean muted = false;
 
         // check if player is muted
-        if ( mute.isMuted(sender.getUniqueId()) || mute.isMuted(sender.name().toString())) muted = true;
+        if ( mute.isMuted(sender.getUniqueId()) || mute.isMuted(sender.name().toString())) {
+            send.messagePlayer(sender, format.ghostMessage(sender, message) );
+            event.setCancelled(true);
+            return;
+        }
 
+        // handle spam limiter
         if (spamLimiter.enabled) {
             spamLimiter.inc(sender, 1);
             if (!spamLimiter.canChat(sender)) {
                 // shows the spammer their own messages, so they do not know they are being ignored
-                send.messagePlayer(sender, format.playerMessage(sender, message) );
+                send.messagePlayer(sender, format.ghostMessage(sender, message) );
+                event.setCancelled(true);
                 return;
             }
         }
 
+        double timer = System.currentTimeMillis();;
 
+        // scan message through filters
+        String scanned_message = filters.scanString(sender, message);
+
+        // output time it took to scan
+        if (config.profile) System.out.println("SCANNED IN " + (System.currentTimeMillis() - timer) + " MILLISECONDS" );
+
+
+
+        // if message is unchanged, then do nothing
+        if (scanned_message == null) event.setCancelled(true);
     }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

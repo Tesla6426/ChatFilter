@@ -1,4 +1,4 @@
-package net.txsla.chatfilter.mute;
+package net.txsla.chatfilter;
 
 
 import net.txsla.chatfilter.ChatFilter;
@@ -19,7 +19,7 @@ public class mute {
     private static File file;
     private static YamlConfiguration muteConfig;
 
-    public void load() {
+    public static void loadConfig() {
 
         // load config file
         file = new File(getPlugin(ChatFilter.class).getDataFolder(), "mute.yml");

@@ -1,36 +1,62 @@
 package net.txsla.chatfilter;
 
-import net.txsla.chatfilter.log.file;
-import net.txsla.chatfilter.spam.spamLimiter;
-import org.bukkit.Server;
+import net.txsla.chatfilter.command.main_command;
+import net.txsla.chatfilter.log.webhook;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.inject.Inject;
 import java.nio.file.Path;
 
 public final class ChatFilter extends JavaPlugin {
     public static Plugin plugin;
     public static Path dir;
     @Override
-        public void onEnable() {
-            // Plugin startup logic
-            saveDefaultConfig();
-            plugin = this;
-            // get plugin file path
-            dir = this.getDataPath();
-            System.out.println("DATA DIRECTORY: " + dir);
+    public void onEnable() {
+        // Plugin startup logic
+        plugin = this;
+        dir = this.getDataPath();
 
-            // load plugin configurations
-            loadConfig();
 
-            // load filters
-            config.loadFilters();
-            getLogger().info("Enabled Filters: [" + "]");
+        // load plugin configurations
+        saveDefaultConfig();
+        loadConfig();
+        if (config.debug) System.out.println("DEBUT OUTPUT ENABLED");
 
-            // register events
-            getServer().getPluginManager().registerEvents(new listener(), this);
+        // load filters
+        filters.loadConfig();
+        getLogger().info("Registered Filters: " + filters.registered_filters);
+        filters.loadCategories();
 
+
+        // load mute configs
+        mute.loadConfig();
+        mute.loadMuteList();
+
+        // register events
+        getServer().getPluginManager().registerEvents(new listener(), this);
+
+        // start spam limiter decrement timer
+        spamLimiter.startDecTimer();
+
+        // load log file
+        try {
+            net.txsla.chatfilter.log.file.loadLogFile();
+            net.txsla.chatfilter.log.file.add("Log File Loaded");
+        } catch (Exception e) {
+            getLogger().warning("Unable to load log File");
+            if (config.debug) System.out.println(e);
+        }
+
+        // Load webhook
+        try {
+            webhook.add("ChatFilter Webhook Connected");
+        } catch (Exception e) {
+            getLogger().warning("Unable to load Webhook");
+            if (config.debug) System.out.println(e);
+        }
+
+        // register command
+        getCommand("chatfilter").setExecutor(new main_command());
 
 
     }
@@ -40,12 +66,27 @@ public final class ChatFilter extends JavaPlugin {
         // Plugin shutdown logic
     }
     public void loadConfig() {
+        config.debug = this.getConfig().getBoolean("debug");
+        config.profile = this.getConfig().getBoolean("profile");
 
-        // load boolean
+        // log configs
         net.txsla.chatfilter.log.file.enabled = this.getConfig().getBoolean("log.to-file");
         net.txsla.chatfilter.log.webhook.enabled = this.getConfig().getBoolean("log.to-discord");
-        spamLimiter.enabled = this.getConfig().getBoolean("spam-limiter.enabled");
-        config.debug = this.getConfig().getBoolean("debug");
+        webhook.webhook = this.getConfig().getString("log.webhook");
 
+
+        // spam limiter / mute configs
+        spamLimiter.enabled = this.getConfig().getBoolean("spam-limiter.enabled");
+        spamLimiter.ghost = this.getConfig().getBoolean("spam-limiter.ghost-player");
+        spamLimiter.decTimer = this.getConfig().getInt("spam-limiter.decrement-timer");
+        spamLimiter.maxCounter = this.getConfig().getInt("spam-limiter.counter-ceiling");
+
+        // formatting config
+        format.ghost_format = this.getConfig().getString("mute.ghost-format");
+        format.notify_format = this.getConfig().getString("notify.message");
+        format.log_format = this.getConfig().getString("log.message-format");
+
+        // Filters / Categories
+        filters.registered_filters = this.getConfig().getStringList("registered-categories");
     }
 }

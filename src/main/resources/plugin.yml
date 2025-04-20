@@ -2,3 +2,29 @@ name: ChatFilter
 version: '${project.version}'
 main: net.txsla.chatfilter.ChatFilter
 api-version: '1.21'
+
+permissions :
+  chatfilter.command:
+    description: "Allows players to use Chat Filter's commands"
+    default-permission: false
+    default: op
+  chatfilter.notify:
+    description: "Get notified when a player trips a filter"
+    default-permission: false
+    default: op
+  chatfilter.filter.bypass:
+    description: "Bypass all chat filters"
+    default-permission: false
+    default: op
+  chatfilter.spam.bypass:
+    description: "Bypass spam limiter"
+    default-permission: false
+    default: op
+
+commands:
+  chatfilter:
+    description: "command for managing chat filter"
+    usage: "/chatfilter <sub>"
+    aliases: [cf]
+    permission: chatfilter.command
+    permission-message: "You do not have permission to use this command"

@@ -4,7 +4,5 @@ import net.txsla.chatfilter.log.file;
 
 public class config {
     public static boolean debug;
-    public static void loadFilters() {
-
-    }
+    public static boolean profile;
 }

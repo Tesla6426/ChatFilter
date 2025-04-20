@@ -1,4 +1,4 @@
-package net.txsla.chatfilter.spam;
+package net.txsla.chatfilter;
 
 import org.bukkit.entity.Player;
 
@@ -11,6 +11,7 @@ public class spamLimiter {
     public static int maxCounter;
     public static int decTimer;
     public static boolean enabled;
+    public static boolean ghost;
     public static void addPlayer(Player player) {
         // do NOT add if player is already added to counter/index
         // currently this uses the player object to reset the counter after each rejoin -
