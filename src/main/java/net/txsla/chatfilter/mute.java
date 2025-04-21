@@ -59,11 +59,11 @@ public class mute {
             // convert duration to a unix time code
             if (!(num > 0)) return false;
             switch (let) {
-                case "min": muted_until += num*60000L; break;
-                case "hr": muted_until += num*3600000L; break;
+                case "m": muted_until += num*60000L; break;
+                case "h": muted_until += num*3600000L; break;
                 case "d": muted_until += num*86400000L; break;
-                case "wk": muted_until += num*604800000L; break;
-                case "yr": muted_until += num*31557600000L; break;
+                case "w": muted_until += num*604800000L; break;
+                case "y": muted_until += num*31557600000L; break;
                 // invalid input
                 default: return false;
             }

@@ -52,27 +52,27 @@ public class mute {
                 // retun num + time
                 if (args[2].matches("[0-9]+")) {
                     // if user has typed numbers, suggest durations after
-                    list.add(args[2] + "min"); // minutes
-                    list.add(args[2] + "hr"); // hours
+                    list.add(args[2] + "m"); // minutes
+                    list.add(args[2] + "h"); // hours
                     list.add(args[2] + "d"); // days
-                    list.add(args[2] + "wk"); // weeks
-                    list.add(args[2] + "yr"); // years
+                    list.add(args[2] + "w"); // weeks
+                    list.add(args[2] + "y"); // years
                 }else {
                     // I hate to nest ifs like this, but I do not feel like rewriting this method,
                     // and it has no impact on performance
                     if (args[2].matches("[0-9]+[a-z]+")) {
                         // if player is typing time
-                        list.add("min"); // minutes
-                        list.add("hr"); // hours
+                        list.add("m"); // minutes
+                        list.add("h"); // hours
                         list.add("d"); // days
-                        list.add("wk"); // weeks
-                        list.add("yr"); // years
+                        list.add("w"); // weeks
+                        list.add("y"); // years
                     } else {
-                        list.add("<int>min"); // minutes
-                        list.add("<int>hr"); // hours
+                        list.add("<int>m"); // minutes
+                        list.add("<int>h"); // hours
                         list.add("<int>d"); // days
-                        list.add("<int>wk"); // weeks
-                        list.add("<int>yr"); // years
+                        list.add("<int>w"); // weeks
+                        list.add("<int>y"); // years
                     }
                 }
                 break;

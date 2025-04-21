@@ -49,7 +49,7 @@ categories:
     action:
       - 'cancel'
     commands:
-      - '/cf mute %PLAYER% 1h Chat Filter'
+      - '/chatfilter mute %PLAYER% 5m Chat Filter'
     regex:
       - 'https?://'
       - '[\w\d-]+\.(net|com|org)'
@@ -60,9 +60,9 @@ categories:
     action:
       - 'cancel'
     commands:
-      - '/cf mute %PLAYER% 1h Chat Filter'
+      - '/chatfilter mute %PLAYER% 1h Chat Filter'
     regex:
-      - '^[A-Z\s]$'
+      - '^[A-Z\s]+$'
 
 
   # The GamerSafer Regex list cannot be modified as it uses GamerSafer's official list

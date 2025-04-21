@@ -82,7 +82,7 @@ public final class ChatFilter extends JavaPlugin {
         spamLimiter.maxCounter = this.getConfig().getInt("spam-limiter.counter-ceiling");
 
         // formatting config
-        format.ghost_format = this.getConfig().getString("mute.ghost-format");
+        format.ghost_format = this.getConfig().getString("ghost-format");
         format.notify_format = this.getConfig().getString("notify.message");
         format.log_format = this.getConfig().getString("log.message-format");
         format.notify_hover = this.getConfig().getString("notify.hover");
