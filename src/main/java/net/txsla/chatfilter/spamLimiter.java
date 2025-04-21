@@ -25,6 +25,9 @@ public class spamLimiter {
         counter.set(index.indexOf(player), counter.get(index.indexOf(player)) + i);
     }
     public static boolean canChat(Player player) {
+        // bypass perms
+        if (player.hasPermission("chatfilter.spam.bypass")) return true;
+
         return counter.get(index.indexOf(player)) <= maxCounter;
     }
     public static void startDecTimer() {
@@ -32,8 +35,8 @@ public class spamLimiter {
         Thread dec = new Thread(()->
         {
             int i =0;
-            // debug, remove later
-            System.out.println("dec timer started");
+
+            if (config.debug) System.out.println("dec timer started");
 
             while (true) {
                 i = 0;

@@ -9,7 +9,7 @@ public class debug {
     public static void run(String[] args, CommandSender sender) {
         // enables debug without needing to update the config
 
-        if (args.length < 1) {
+        if (args.length <= 1) {
             sender.sendMessage("Debug is set to " + config.debug);
             return;
         }

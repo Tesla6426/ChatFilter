@@ -14,8 +14,8 @@ event-priority: normal
 # The 'gamersafer' list is the official list of GamerSafer.com
 registered-categories:
   - 'gamersafer'
-  - 'example1'
-  - 'example2'
+  - 'demo-websites'
+  - 'demo-all_caps'
 
 
 # [  SPAM LIMITER   ]
@@ -57,10 +57,13 @@ mute:
 # %PLAYER% - violator's username
 # %MESSAGE% - message that triggered the filter
 # %CATEGORY% - filter category that got triggered
+# %PATTERN% - regex pattern that matched
 # %RECIPIENT% - player who is receiving the message
 notify:
   enabled: false
-  message: '<red>%PLAYER% has violated %CATEGORY% with message %MESSAGE%</red>'
+  message: '<red>@%RECIPIENT% | %PLAYER% : %MESSAGE% </red>'
+  # set hover to null to disable
+  hover: '%CATEGORY%'
 
 
 # logs violations

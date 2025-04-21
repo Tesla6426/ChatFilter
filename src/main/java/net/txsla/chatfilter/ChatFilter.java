@@ -20,7 +20,11 @@ public final class ChatFilter extends JavaPlugin {
         // load plugin configurations
         saveDefaultConfig();
         loadConfig();
-        if (config.debug) System.out.println("DEBUT OUTPUT ENABLED");
+        if (config.debug) System.out.println("DEBUG OUTPUT ENABLED");
+
+        // bstats
+        int pluginId = 25558;
+        Metrics metrics = new Metrics(this, pluginId);
 
         // load filters
         filters.loadConfig();
@@ -48,12 +52,8 @@ public final class ChatFilter extends JavaPlugin {
         }
 
         // Load webhook
-        try {
-            webhook.add("ChatFilter Webhook Connected");
-        } catch (Exception e) {
-            getLogger().warning("Unable to load Webhook");
-            if (config.debug) System.out.println(e);
-        }
+        if (config.debug) webhook.add("ChatFilter Webhook Connected");
+
 
         // register command
         getCommand("chatfilter").setExecutor(new main_command());
@@ -85,6 +85,7 @@ public final class ChatFilter extends JavaPlugin {
         format.ghost_format = this.getConfig().getString("mute.ghost-format");
         format.notify_format = this.getConfig().getString("notify.message");
         format.log_format = this.getConfig().getString("log.message-format");
+        format.notify_hover = this.getConfig().getString("notify.hover");
 
         // Filters / Categories
         filters.registered_filters = this.getConfig().getStringList("registered-categories");

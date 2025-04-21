@@ -1,7 +1,7 @@
 package net.txsla.chatfilter.command;
 
-import net.txsla.chatfilter.command.sub.debug;
-import net.txsla.chatfilter.command.sub.profile;
+import net.txsla.chatfilter.ChatFilter;
+import net.txsla.chatfilter.command.sub.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,17 +19,35 @@ public class main_command implements CommandExecutor, TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         // if no args, then return version
         if (args.length == 0) {
-            sender.sendMessage("Advanced Restart v1.2.0");
+            sender.sendMessage(ChatFilter.plugin.getPluginMeta().getName() + " " + ChatFilter.plugin.getPluginMeta().getVersion());
             return true;
         }
 
         // send args to subcommand
         switch (args[0]) {
+            case "status":
+                status.run(args, sender);
+                break;
             case "debug":
                 debug.run(args, sender);
                 break;
+            case "enable":
+                enable.run(args, sender);
+                break;
+            case "disable":
+                disable.run(args, sender);
+                break;
             case "profile":
                 profile.run(args, sender);
+                break;
+            case "mute":
+                mute.run(args, sender);
+                break;
+            case "unmute":
+                unmute.run(args, sender);
+                break;
+            case "reload":
+                reload.run(args, sender);
                 break;
             default:
                 return false;
@@ -43,7 +61,12 @@ public class main_command implements CommandExecutor, TabExecutor {
             List<String> list = new ArrayList<>();
             list.add("profile");
             list.add("debug");
-
+            list.add("mute");
+            list.add("unmute");
+            list.add("reload");
+            list.add("enable");
+            list.add("disable");
+            list.add("status");
             return list;
         }
 
@@ -51,8 +74,18 @@ public class main_command implements CommandExecutor, TabExecutor {
         switch (args[0]) {
             case "debug":
                 return debug.tab(args);
+            case "mute":
+                return mute.tab(args);
             case "profile":
-                return debug.tab(args);
+                return profile.tab(args);
+            case "disable":
+                return disable.tab(args);
+            case "enable":
+                return enable.tab(args);
+            case "unmute":
+                return unmute.tab(args);
+            case "status":
+                return status.tab(args);
             default:
                 return null;
         }

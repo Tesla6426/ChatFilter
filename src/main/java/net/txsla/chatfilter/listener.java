@@ -17,8 +17,11 @@ public class listener implements Listener {
         String message = PlainTextComponentSerializer.plainText().serialize( event.message() );
         boolean muted = false;
 
+        // bypass perms
+        if (sender.hasPermission("chatfilter.filter.bypass")) return;
+
         // check if player is muted
-        if ( mute.isMuted(sender.getUniqueId()) || mute.isMuted(sender.name().toString())) {
+        if ( mute.isUUIDMuted( sender.getUniqueId().toString() ) || mute.isNameMuted(sender.name().toString())) {
             send.messagePlayer(sender, format.ghostMessage(sender, message) );
             event.setCancelled(true);
             return;
@@ -46,7 +49,11 @@ public class listener implements Listener {
 
 
         // if message is unchanged, then do nothing
-        if (scanned_message == null) event.setCancelled(true);
+        if (scanned_message == null) {
+            if (config.profile) System.out.println(sender.getName() + "s' Message Cancelled" );
+            event.setCancelled(true);
+        }
+
     }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

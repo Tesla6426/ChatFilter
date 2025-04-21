@@ -7,9 +7,9 @@ import java.util.List;
 
 public class profile {
     public static void run(String[] args, CommandSender sender) {
-        // enables debug without needing to update the config
+        // enables profiler without needing to update the config
 
-        if (args.length < 1) {
+        if (args.length <= 1) {
             sender.sendMessage("Profile is set to " + config.profile);
             return;
         }

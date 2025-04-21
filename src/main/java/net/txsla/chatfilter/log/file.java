@@ -1,6 +1,8 @@
 package net.txsla.chatfilter.log;
 
 import net.txsla.chatfilter.ChatFilter;
+import net.txsla.chatfilter.config;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -28,15 +30,15 @@ public class file {
 
         // file name
         logFileName = "log_" + LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
-        System.out.println( path + File.separator + logFileName);
+        if (config.debug) System.out.println( path + File.separator + logFileName);
         logFile = new File(path + File.separator + logFileName );
 
         // load file
         try {
             if (logFile.createNewFile()) {
-                System.out.println("[ProxyChat] [log] new log file created: " + logFileName);
+                if (config.debug) System.out.println("[ProxyChat] [log] new log file created: " + logFileName);
             }else {
-                System.out.println("[ProxyChat] [log] log file loaded: " + logFileName);
+                if (config.debug) System.out.println("[ProxyChat] [log] log file loaded: " + logFileName);
             }
         }
         catch (Exception e) {

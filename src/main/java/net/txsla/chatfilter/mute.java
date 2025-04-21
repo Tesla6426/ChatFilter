@@ -1,7 +1,6 @@
 package net.txsla.chatfilter;
 
 
-import net.txsla.chatfilter.ChatFilter;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -15,7 +14,7 @@ import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
 public class mute {
     public static boolean requireReason;
     public static List<String> muted_name = new ArrayList<>();
-    public static List<UUID> muted_uuid = new ArrayList<>();
+    public static List<String> muted_uuid = new ArrayList<>();
     private static File file;
     private static YamlConfiguration muteConfig;
 
@@ -32,11 +31,11 @@ public class mute {
 
     }
 
-    public static boolean isMuted(UUID uuid) {
-        for (UUID u : muted_uuid) if (u != null) if (u.equals(uuid)) return true;
+    public static boolean isUUIDMuted(String uuid) {
+        for (String u : muted_uuid) if (u != null) if (u.equals(uuid)) return true;
         return false;
     }
-    public static boolean isMuted(String username) {
+    public static boolean isNameMuted(String username) {
         for (String s : muted_name) if (s.equals(username)) return true;
         return false;
     }
@@ -60,11 +59,11 @@ public class mute {
             // convert duration to a unix time code
             if (!(num > 0)) return false;
             switch (let) {
-                case "m": muted_until += num*60000L; break;
-                case "h": muted_until += num*3600000L; break;
+                case "min": muted_until += num*60000L; break;
+                case "hr": muted_until += num*3600000L; break;
                 case "d": muted_until += num*86400000L; break;
-                case "w": muted_until += num*604800000L; break;
-                case "y": muted_until += num*31557600000L; break;
+                case "wk": muted_until += num*604800000L; break;
+                case "yr": muted_until += num*31557600000L; break;
                 // invalid input
                 default: return false;
             }
@@ -77,13 +76,13 @@ public class mute {
 
         // populate punishment-info in config
         muteConfig.createSection("punishment-info." +username);
-        muteConfig.set("punishment-info." +username+".uuid", uuid);
+        if (uuid != null) muteConfig.set("punishment-info." + username + ".uuid", uuid.toString());
         muteConfig.set("punishment-info." +username+".time-muted", date.getTime() );
         muteConfig.set("punishment-info." +username+".muted-until", muted_until);
         muteConfig.set("punishment-info." +username+".muted-by", mute_enforcer);
         muteConfig.set("punishment-info." +username+".reason", reason);
 
-        muteLog( username + " (" + uuid + ") was muted by " + mute_enforcer + "for " + reason);
+        muteLog( username + " (" + uuid + ") was muted by " + mute_enforcer + " for " + reason);
 
         // save
         try {
@@ -95,14 +94,15 @@ public class mute {
         loadMuteList();
         return true;
     }
-    public static boolean unmutePlayer(String username) {
-        if (!isMuted(username)) return false;
+    public static boolean unmutePlayer(String username, String sender) {
+        if (!isNameMuted(username)) return false;
         try {
             List<String> mute_list = muteConfig.getStringList("mute-list");
             mute_list.remove(username);
             muteConfig.set("mute-list", mute_list);
             muteConfig.save(file);
             loadMuteList();
+            muteLog(username + " unmuted by " + sender);
         } catch (Exception e) {System.out.println(e); return false;}
         return true;
     }
@@ -113,13 +113,13 @@ public class mute {
     }
     public static String getMuteUUIDList() {
         String mute_list = "[";
-        for (UUID s : muted_uuid) mute_list += s + ", ";
+        for (String s : muted_uuid) mute_list += s + ", ";
         return mute_list.replaceAll(", $", "") + "]";
     }
     public static String muteInfo(String username) {
         Date date = new Date();
         // return info on a player's mute status
-        boolean is_muted = isMuted(username);
+        boolean is_muted = isNameMuted(username);
         String mute_info =
                 "player: " + username + "\n" +
                         "is_muted: " + is_muted + "\n";
@@ -145,9 +145,10 @@ public class mute {
 
         // (re)load the mute list from config file
         muted_name = muteConfig.getStringList("mute-list");
-        for (String s : muted_name) muted_uuid.add((UUID) muteConfig.get("punishment-info." + s + ".uuid"));
+        for (String s : muted_name) muted_uuid.add( muteConfig.getString("punishment-info." + s + ".uuid") );
     }
     public static void muteLog(String log) {
         // log all mute actions to log file
+        net.txsla.chatfilter.log.log.add(log);
     }
 }

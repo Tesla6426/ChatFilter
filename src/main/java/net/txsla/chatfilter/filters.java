@@ -63,6 +63,9 @@ public class filters {
         if (config.debug) System.out.println("[scanString] Checking String: '" + string + "'");
         String scanString = string;
 
+        // Your compiler will tell you this is redundant, but I can assure you it is not
+        Player placeholder = p;
+
         // if a category has been found
         boolean matched = false;
         // used for censor (there could be multiple matches in the same string that need to be censored)
@@ -90,7 +93,7 @@ public class filters {
                                 case "notify":
                                     // notify users then set flag to prevent spam
                                     if (!notified) {
-                                        send.notifyUser(p, filter.getName(), string);
+                                        send.notifyUser(p, filter.getName(), string, regex);
                                         notified = true;
                                     }
                                     break;
@@ -136,7 +139,7 @@ public class filters {
                         if (!matched) {
                             // format and execute commands
                             for (String command : filter.getCommands()) {
-                                execute.console( format.command(command, p, string) );
+                                execute.console( format.command(command, placeholder, string) );
                             }
                         }
 

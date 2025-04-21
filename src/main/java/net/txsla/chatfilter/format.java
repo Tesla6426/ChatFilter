@@ -1,7 +1,10 @@
 package net.txsla.chatfilter;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
@@ -11,6 +14,7 @@ public class format {
     public static String log_format;
     public static String ghost_format;
     public static String notify_format;
+    public static String notify_hover;
     public static String ghostMessage(Player player, String message) {
         String formattedMessage = ghost_format;
 
@@ -21,15 +25,34 @@ public class format {
                 .replaceAll("%PLAYER%", player.getName())
                 .replaceAll("%MESSAGE%", Matcher.quoteReplacement(message));
     }
-    public static String notifyMessage(Player sender, Player recipient, String category, String message) {
+    public static Component notifyMessage(final Player sender, final Player recipient, final String category, final String message, final String pattern) {
         String formattedMessage = notify_format;
+        String formattedHover = notify_hover;
 
         // replace placeholders
-        return formattedMessage
-                .replaceAll("%CAREGORY%", category)
-                .replaceAll("%RECIPIANT%", recipient.getName())
-                .replaceAll("%PLAYER%", sender.getName())
-                .replaceAll("%MESSAGE%", Matcher.quoteReplacement(message));
+        formattedMessage = formattedMessage
+                .replaceAll("%CATEGORY%", category)
+                .replaceAll("%RECIPIENT%", recipient.getName())
+                .replaceAll("%MESSAGE%", Matcher.quoteReplacement(message))
+                .replaceAll("%PATTERN%", Matcher.quoteReplacement(pattern))
+                .replaceAll("%PLAYER%", sender.getName());
+
+        // send as is if hover is disabled
+        if (formattedHover == null) return MiniMessage.miniMessage().deserialize(formattedMessage);
+
+        // format hover
+        net.kyori.adventure.text.event.HoverEvent<Component> hover =
+                MiniMessage.miniMessage().deserialize(
+                    formattedHover.replaceAll("%CATEGORY%", category)
+                        .replaceAll("%RECIPIANT%", recipient.getName())
+                        .replaceAll("%PLAYER%", sender.getName())
+                        .replaceAll("%MESSAGE%", Matcher.quoteReplacement(message))
+                ).asHoverEvent();
+
+        // this might work hopefully
+        return MiniMessage.miniMessage()
+                .deserialize(formattedMessage)
+                .hoverEvent(hover);
     }
     public static String command(String command, Player atP, String message) {
         if (message.length() > 33) message = message.substring(0, 31);
