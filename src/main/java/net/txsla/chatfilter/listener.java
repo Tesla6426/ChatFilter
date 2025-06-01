@@ -38,22 +38,19 @@ public class listener implements Listener {
             }
         }
 
-        double timer = System.currentTimeMillis();;
+        double timer = System.nanoTime();;
 
         // scan message through filters
-        String scanned_message = filters.scanString(sender, message);
+        boolean cancel_message = filters.fasterScanString(sender, message);
 
         // output time it took to scan
-        if (config.profile) System.out.println("SCANNED IN " + (System.currentTimeMillis() - timer) + " MILLISECONDS" );
+        if (config.profile) System.out.println("processed in " + ((System.nanoTime() - timer)/1000000) + " MILLISECONDS" );
 
-
-
-        // if message is unchanged, then do nothing
-        if (scanned_message == null) {
-            if (config.profile) System.out.println(sender.getName() + "s' Message Cancelled" );
+        // if message is null, then cancel
+        if (cancel_message) {
+            if (config.profile) System.out.println(sender.getName() + "'s Message Cancelled" );
             event.setCancelled(true);
         }
-
     }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

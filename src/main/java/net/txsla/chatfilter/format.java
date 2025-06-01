@@ -5,6 +5,7 @@ import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.txsla.chatfilter.command.execute;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
@@ -20,10 +21,10 @@ public class format {
 
         // replace placeholders
         return formattedMessage
-                .replaceAll("%WORLD%", player.getWorld().toString())
-                .replaceAll("%SERVER%", ChatFilter.plugin.getServer().getName())
-                .replaceAll("%PLAYER%", player.getName())
-                .replaceAll("%MESSAGE%", Matcher.quoteReplacement(message));
+                .replaceAll("%[Ww][Oo][Rr][Ll][Dd]%", player.getWorld().toString())
+                .replaceAll("%[Ss][Ee][Rr][Vv][Ee][Rr]%", ChatFilter.plugin.getServer().getName())
+                .replaceAll("%[Pp][Ll][Aa][Yy][Ee][Rr]%", player.getName())
+                .replaceAll("%[Mm][Ee][Ss][Ss][Aa][Gg][Ee]%", Matcher.quoteReplacement(message));
     }
     public static Component notifyMessage(final Player sender, final Player recipient, final String category, final String message, final String pattern) {
         String formattedMessage = notify_format;
@@ -31,11 +32,11 @@ public class format {
 
         // replace placeholders
         formattedMessage = formattedMessage
-                .replaceAll("%CATEGORY%", category)
-                .replaceAll("%RECIPIENT%", recipient.getName())
-                .replaceAll("%MESSAGE%", Matcher.quoteReplacement(message))
-                .replaceAll("%PATTERN%", Matcher.quoteReplacement(pattern))
-                .replaceAll("%PLAYER%", sender.getName());
+                .replaceAll("%[Cc][Aa][Tt][Ee][Gg][Oo][Rr][Yy]%", category)
+                .replaceAll("%[Rr][Ee][Cc][Ii][Pp][Ii][Aa][Nn][Tt]%", recipient.getName())
+                .replaceAll("%[Mm][Ee][Ss][Ss][Aa][Gg][Ee]%", Matcher.quoteReplacement(message))
+                .replaceAll("%[Pp][Aa][Tt][Tt][Ee][Rr][Nn]%", Matcher.quoteReplacement(pattern))
+                .replaceAll("%[Pp][Ll][Aa][Yy][Ee][Rr]%", sender.getName());
 
         // send as is if hover is disabled
         if (formattedHover == null) return MiniMessage.miniMessage().deserialize(formattedMessage);
@@ -43,10 +44,10 @@ public class format {
         // format hover
         net.kyori.adventure.text.event.HoverEvent<Component> hover =
                 MiniMessage.miniMessage().deserialize(
-                    formattedHover.replaceAll("%CATEGORY%", category)
-                        .replaceAll("%RECIPIANT%", recipient.getName())
-                        .replaceAll("%PLAYER%", sender.getName())
-                        .replaceAll("%MESSAGE%", Matcher.quoteReplacement(message))
+                    formattedHover.replaceAll("%[Cc][Aa][Tt][Ee][Gg][Oo][Rr][Yy]%", category)
+                        .replaceAll("%[Rr][Ee][Cc][Ii][Pp][Ii][Aa][Nn][Tt]%", recipient.getName())
+                        .replaceAll("%[Pp][Ll][Aa][Yy][Ee][Rr]%", sender.getName())
+                        .replaceAll("%[Mm][Ee][Ss][Ss][Aa][Gg][Ee]%", Matcher.quoteReplacement(message))
                 ).asHoverEvent();
 
         // this might work hopefully
@@ -54,21 +55,30 @@ public class format {
                 .deserialize(formattedMessage)
                 .hoverEvent(hover);
     }
-    public static String command(String command, Player atP, String message) {
+    public static void command_and_execute_async(String command, Player atP, String message, String regex, String category) {
+        new Thread (()->{
+            execute.console( format.command(command, atP, message, regex, category) );
+        }).start();
+    }
+    public static String command(String command, Player atP, String message, String regex, String category) {
         if (message.length() > 33) message = message.substring(0, 31);
-        return command.replaceAll("%PLAYER%", atP.getName())
-                .replaceAll("%UUID%", Matcher.quoteReplacement(atP.getUniqueId().toString()))
-                .replaceAll("%IP%", Matcher.quoteReplacement(Objects.requireNonNull(atP.getAddress()).toString()) + "")
-                .replaceAll("%WORLD%", Matcher.quoteReplacement(atP.getWorld().getName()))
-                .replaceAll("%MESSAGE%", Matcher.quoteReplacement(message));
+        return command.replaceAll("%[Pp][Ll][Aa][Yy][Ee][Rr]%", atP.getName())
+                .replaceAll("%[Uu][Uu][Ii][Dd]%", Matcher.quoteReplacement(atP.getUniqueId().toString()))
+                .replaceAll("%[Ii][Pp]%", Matcher.quoteReplacement(Objects.requireNonNull(atP.getAddress()).toString()) + "")
+                .replaceAll("%[Ww][Oo][Rr][Ll][Dd]%", Matcher.quoteReplacement(atP.getWorld().getName()))
+                .replaceAll("%[Mm][Ee][Ss][Ss][Aa][Gg][Ee]%", Matcher.quoteReplacement(message))
+
+
+                .replaceAll("%[Pp][Aa][Tt][Tt][Ee][Rr][Nn]%", Matcher.quoteReplacement(regex))
+                .replaceAll("%[Cc][Aa][Tt][Ee][Gg][Oo][Rr][Yy]%", Matcher.quoteReplacement(category));
     }
     public static String log(Player p, String message, String category, String regex) {
         String formattedMessage = log_format;
         // format log messages
-        return formattedMessage.replaceAll("%PLAYER%", p.getName())
-                .replaceAll("%MESSAGE%", Matcher.quoteReplacement(message))
-                .replaceAll("%CATEGORY%", Matcher.quoteReplacement(category))
-                .replaceAll("%PATTERN%", Matcher.quoteReplacement(category));
+        return formattedMessage.replaceAll("%[Pp][Ll][Aa][Yy][Ee][Rr]%", p.getName())
+                .replaceAll("%[Mm][Ee][Ss][Ss][Aa][Gg][Ee]%", Matcher.quoteReplacement(message))
+                .replaceAll("%[Cc][Aa][Tt][Ee][Gg][Oo][Rr][Yy]%", Matcher.quoteReplacement(category))
+                .replaceAll("%[Pp][Aa][Tt][Tt][Ee][Rr][Nn]%", Matcher.quoteReplacement(category));
     }
     public static Component message(String message) {
         return MiniMessage.miniMessage().deserialize(message);

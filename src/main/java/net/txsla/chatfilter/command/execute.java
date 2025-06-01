@@ -15,15 +15,18 @@ public class execute {
 
         if (config.debug) System.out.println("[Advanced Restart] executing command " + command);
 
-        // dispatch synchronously
-        if (Bukkit.isPrimaryThread()) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-        } else {
-            final String com = command; // fuck you java
-            Bukkit.getScheduler().runTask(ChatFilter.plugin, () ->
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), com)
-            );
-        }
+        // dispatch command asynchronously
+        final String com = command;
+        Thread execute_commands_asynchronously = new Thread(()-> {
+            if (Bukkit.isPrimaryThread()) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), com);
+            } else {
+                Bukkit.getScheduler().runTask(ChatFilter.plugin, () ->
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), com)
+                );
+            }
+        });
+        execute_commands_asynchronously.start();
 
     }
     public static void console(List<String> commands) {

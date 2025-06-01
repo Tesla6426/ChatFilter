@@ -10,7 +10,6 @@
 # 'notify' - notify user as specified in config.yml under notify
 # (only put one of the below per category)
 # 'cancel' - cancel the message
-# 'censor' - replaced the offending message with asterisks (slowest optimised)
 # 'ghost' - return message to sender but hide message from other players
 # 'ignore' - does not cancel or modify the message, but still runs the commands
 
@@ -19,6 +18,8 @@
 # %PLAYER%     - offending player's username
 # %UUID%       - offending player's UUID
 # %MESSAGE%    - message that triggered the violation
+# %PATTERN%    - pattern that matched the offending text
+# %CATEGORY% - filter category that got triggered
 # %WORLD%      - world that offending player was in
 # %IP%         - player's IP address, useful for auto IP BANS
 
@@ -75,7 +76,13 @@ categories:
     commands:
       '/mute %PLAYER% 1h'
     # How strict should the filter be?
-    # low : only exact word matches will trigger the filter
-    # medium : close matches will trigger the filter
-    # high : highest
-    strictness: 'low'
+    # 0 : exact match, case-insensitive
+    # 1 : matches extra letters, case-insensitive
+    # 2 : matches whitespace, extra letters, case-insensitive
+    strictness: 1
+    # For words that have too many false-positives
+    exclude:
+      - 'cok'
+      - 'iap'
+      - 'sm'
+      - 'ho'

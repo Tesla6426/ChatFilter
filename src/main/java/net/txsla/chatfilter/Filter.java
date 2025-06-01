@@ -1,12 +1,13 @@
 package net.txsla.chatfilter;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Filter {
     private String name;
     private boolean enabled;
     private List<String> action;
-    private List<String> regex;
+    private List<Pattern> regex;
     private List<String> commands;
 
     // constructors
@@ -17,7 +18,7 @@ public class Filter {
         this.name = name;
         this.enabled = enabled;
     }
-    public Filter(String name, boolean enabled, List<String> action, List<String> regex, List<String> commands) {
+    public Filter(String name, boolean enabled, List<String> action, List<Pattern> regex, List<String> commands) {
         this.name = name;
         this.enabled = enabled;
         this.action = action;
@@ -29,7 +30,7 @@ public class Filter {
     public void setActions(List<String> actions) {
         this.action = actions;
     }
-    public void setRegex(List<String> regex) {
+    public void setRegex(List<Pattern> regex) {
         this.regex = regex;
     }
     public void setCommands(List<String> commands) {
@@ -43,7 +44,7 @@ public class Filter {
     public List<String> getAction() {
         return action;
     }
-    public List<String> getRegex() {
+    public List<Pattern> getRegex() {
         return this.regex;
     }
     public List<String> getCommands() {

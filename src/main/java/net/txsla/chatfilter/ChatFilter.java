@@ -6,6 +6,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ChatFilter extends JavaPlugin {
     public static Plugin plugin;
@@ -66,6 +68,7 @@ public final class ChatFilter extends JavaPlugin {
         // Plugin shutdown logic
     }
     public void loadConfig() {
+
         config.debug = this.getConfig().getBoolean("debug");
         config.profile = this.getConfig().getBoolean("profile");
 
