@@ -53,8 +53,4 @@ public class regex {
         }
         return patterns;
     }
-    public static boolean match(String string, Pattern regex) {
-        // why doesn't java have this be default :/
-        return regex.matcher(string).find();
-    }
 }

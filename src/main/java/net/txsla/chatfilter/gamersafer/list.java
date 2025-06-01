@@ -38,7 +38,7 @@ public class list {
 
             while ((line = reader.readLine()) != null) {
                 // replace all chars after comma for each line
-                if (!net.txsla.chatfilter.regex.match(line, exclude_pattern)) {
+                if ( exclude_pattern.matcher(line).find() ) {
                     if (line.endsWith(",")) {
                         line = line.substring(0, line.length() - 1);
                     }
