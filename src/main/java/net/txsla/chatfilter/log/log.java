@@ -4,7 +4,7 @@ import net.txsla.chatfilter.config;
 
 public class log {
     public static void add(String log) {
-        new Thread(()->{
+        new Thread (() -> {
             // send log
             if (file.enabled) file.add(log);
             try {

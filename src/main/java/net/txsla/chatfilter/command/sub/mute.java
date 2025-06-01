@@ -24,7 +24,7 @@ public class mute {
         // load reason into string
         if (args.length > 4) {
             reason = "";
-            for (int i = 3; i < args.length; i ++) reason += args[i];
+            for (int i = 3; i < args.length; i ++) reason += args[i] + " ";
         }
 
         if (sender instanceof Player) {

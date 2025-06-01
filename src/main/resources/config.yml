@@ -1,9 +1,7 @@
 # Chat Filter by _txsla and NBT Archives
 # This plugin uses MiniMessage to parse messaged
+# https://docs.advntr.dev/minimessage
 
-
-# For compatibility with other chat plugins
-event-priority: normal
 
 # [   REGISTER FILTER CATEGORIES ]
 # Add a category here to register it
@@ -13,9 +11,9 @@ event-priority: normal
 # Messages are filtered from first category in this list to last, so if two filters both match the pattern [a-zA-Z]\.(\.com|\.net), only the one listed first will be triggered
 # The 'gamersafer' list is the official list of GamerSafer.com
 registered-categories:
-  - 'gamersafer'
   - 'demo-websites'
   - 'demo-all_caps'
+  - 'gamersafer'
 
 
 # [  SPAM LIMITER   ]
@@ -61,9 +59,7 @@ mute:
 # %RECIPIENT% - player who is receiving the message
 notify:
   enabled: false
-  message: '<red>@%RECIPIENT% | %PLAYER% : %MESSAGE% </red>'
-  # set hover to null to disable
-  hover: '%CATEGORY%'
+  message: '<click:suggest_command:"/chatfilter mute %PLAYER% 1h %category% violation"><hover:show_text:"category: <red>%CATEGORY%</red><newline>pattern: <red>%PATTERN%</red><newline><grey>click to mute %player%</grey>"><red>@%RECIPIENT% </red><dark_red>|</dark_red><white> %PLAYER% : %MESSAGE%'
 
 
 # logs violations

@@ -21,7 +21,8 @@ public final class ChatFilter extends JavaPlugin {
 
         // load plugin configurations
         saveDefaultConfig();
-        loadConfig();
+        config.plugin = this;
+        config.loadConfig();
         if (config.debug) System.out.println("DEBUG OUTPUT ENABLED");
 
         // bstats
@@ -67,30 +68,24 @@ public final class ChatFilter extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
     }
-    public void loadConfig() {
+    public static void reload() {
+        // reload config file
+        plugin.reloadConfig();
 
-        config.debug = this.getConfig().getBoolean("debug");
-        config.profile = this.getConfig().getBoolean("profile");
+        // load plugin configurations
+        config.loadConfig();
+        if (config.debug) System.out.println("DEBUG OUTPUT ENABLED");
 
-        // log configs
-        net.txsla.chatfilter.log.file.enabled = this.getConfig().getBoolean("log.to-file");
-        net.txsla.chatfilter.log.webhook.enabled = this.getConfig().getBoolean("log.to-discord");
-        webhook.webhook = this.getConfig().getString("log.webhook");
+        // load filters
+        filters.loadConfig();
+        ChatFilter.plugin.getLogger().info("Registered Filters: " + filters.registered_filters);
+        filters.loadCategories();
 
+        // load mute configs
+        mute.loadConfig();
+        mute.loadMuteList();
 
-        // spam limiter / mute configs
-        spamLimiter.enabled = this.getConfig().getBoolean("spam-limiter.enabled");
-        spamLimiter.ghost = this.getConfig().getBoolean("spam-limiter.ghost-player");
-        spamLimiter.decTimer = this.getConfig().getInt("spam-limiter.decrement-timer");
-        spamLimiter.maxCounter = this.getConfig().getInt("spam-limiter.counter-ceiling");
+        if (config.debug) webhook.add("ChatFilter Webhook Connected");
 
-        // formatting config
-        format.ghost_format = this.getConfig().getString("ghost-format");
-        format.notify_format = this.getConfig().getString("notify.message");
-        format.log_format = this.getConfig().getString("log.message-format");
-        format.notify_hover = this.getConfig().getString("notify.hover");
-
-        // Filters / Categories
-        filters.registered_filters = this.getConfig().getStringList("registered-categories");
     }
 }

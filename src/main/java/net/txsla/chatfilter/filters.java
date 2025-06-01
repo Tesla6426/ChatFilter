@@ -76,6 +76,7 @@ public class filters {
 
     public static boolean fasterScanString(Player p, String string) {
         boolean matched = false;
+        boolean done = false;
 
         for (Filter filter : categories) {
             // check if filter is enabled
@@ -95,17 +96,20 @@ public class filters {
                             // notify users then set flag to prevent spam
                             case "notify":
                                 if (!matched) {
-                                    send.notifyUser(p, filter.getName(), string, regex.toString());
+                                    // multithreading bc 10ms is too long
+                                    new Thread (()-> send.notifyUser(p, filter.getName(), string, regex.toString())).start();
                                     matched = true;
                                 }
                                 break;
 
                             case "cancel":
-                                return true;
+                                done = true;
+                                break;
 
                             case "ghost":
                                 send.ghost_message(p, string);
-                                return true;
+                                done = true;
+                                break;
 
                             // ignore actions
                             case "ignore":
@@ -113,17 +117,20 @@ public class filters {
                             default:
                                 break;
                         }
-
-                        // log event once
-                        if (!matched) log.add(format.log(p, string, filter.getName(), regex.toString()));
-
-
-                        // format and execute commands
-                        for (String command : filter.getCommands()) {
-                           execute.console(format.command(command, p, string, regex.toString(), filter.getName()));
-                        }
-
                     }
+                    // run commands and log for each triggered category
+
+                    // log event once
+                    if (!matched) log.add(format.log(p, string, filter.getName(), regex.toString()));
+
+
+                    // format and execute commands
+                    for (String command : filter.getCommands()) {
+                        execute.console( format.command(command, p, string, regex.toString(), filter.getName()));
+                    }
+
+
+                    if (done) return true;
                     matched = true;
                     break;
                 }

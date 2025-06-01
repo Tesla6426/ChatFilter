@@ -24,7 +24,7 @@ public class load {
         }
 
         // Profile stop
-        if (config.profile) System.out.println("GamerSafer list loaded in " + ((System.nanoTime() - start)/1000000) + " MILLISECONDS" );
+        if (config.profile) System.out.println("GamerSafer list loaded in " + ((System.nanoTime() - start)/1000000) + " milliseconds" );
 
         return patterns;
     }

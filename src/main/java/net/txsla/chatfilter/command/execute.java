@@ -9,11 +9,9 @@ import java.util.List;
 public class execute {
     public static void console(String command) {
 
-        if (config.debug) System.out.println("execute command " + command);
 
         if (command.startsWith("/")) command = command.substring(1);
-
-        if (config.debug) System.out.println("[Advanced Restart] executing command " + command);
+        if (config.debug) System.out.println("[Chat Filter] executing command " + command);
 
         // dispatch command asynchronously
         final String com = command;
@@ -27,7 +25,6 @@ public class execute {
             }
         });
         execute_commands_asynchronously.start();
-
     }
     public static void console(List<String> commands) {
         for (String command : commands) console(command);

@@ -12,7 +12,12 @@ public class webhook {
     public static boolean enabled;
     public static String webhook;
     public static void add(String message){
+        // do not run if not enabled
+        if (!enabled) return;
+
         try {
+            if (config.debug) System.out.println("Sending Webhook");
+
             // declare URL
             URL url = new URL(webhook);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();

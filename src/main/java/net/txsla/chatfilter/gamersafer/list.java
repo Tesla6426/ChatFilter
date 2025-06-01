@@ -24,7 +24,7 @@ public class list {
         if (temp.length() > 0) temp.setLength(temp.length() - 1);
         exclude_pattern = Pattern.compile(temp.toString());
 
-        System.out.println("Exclude Pattern: " + exclude_pattern.toString());
+        if (config.debug) System.out.println("Exclude Pattern: " + exclude_pattern);
 
         List<String> words = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class list {
 
             while ((line = reader.readLine()) != null) {
                 // replace all chars after comma for each line
-                if ( exclude_pattern.matcher(line).find() ) {
+                if ( !exclude_pattern.matcher(line).find() ) {
                     if (line.endsWith(",")) {
                         line = line.substring(0, line.length() - 1);
                     }

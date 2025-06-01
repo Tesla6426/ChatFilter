@@ -17,6 +17,9 @@ public class file {
     static String logFileName;
     public static boolean enabled;
     public static void add(String message) {
+        if (!enabled ) return;
+
+        if (config.debug) System.out.println("Adding Log");
         // log text to file
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
@@ -24,7 +27,9 @@ public class file {
             out.close();
         } catch (Exception e) { e.printStackTrace(); }
     }
-    public static void loadLogFile() throws IOException {
+    public static void loadLogFile() {
+        if (!enabled ) return;
+
         path = System.getProperty("user.dir") + File.separator + ChatFilter.dir + File.separator +  "logs";
         new File(path).mkdirs();
 
