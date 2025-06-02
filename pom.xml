@@ -6,7 +6,7 @@
 
     <groupId>net.txsla</groupId>
     <artifactId>ChatFilter</artifactId>
-    <version>0.2.0-beta</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>ChatFilter</name>

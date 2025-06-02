@@ -21,7 +21,7 @@ public class format {
 
         // replace placeholders
         return formattedMessage
-                .replaceAll("%[Ww][Oo][Rr][Ll][Dd]%", player.getWorld().toString())
+                .replaceAll("%[Ww][Oo][Rr][Ll][Dd]%", player.getWorld().getName())
                 .replaceAll("%[Ss][Ee][Rr][Vv][Ee][Rr]%", ChatFilter.plugin.getServer().getName())
                 .replaceAll("%[Pp][Ll][Aa][Yy][Ee][Rr]%", player.getName())
                 .replaceAll("%[Mm][Ee][Ss][Ss][Aa][Gg][Ee]%", Matcher.quoteReplacement(message))
